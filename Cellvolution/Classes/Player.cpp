@@ -41,8 +41,8 @@ Color Player::getRandomColor(Color c)
 
 void Player::changeColor()
 {
-	Color color = getRandomColor(_core->PlayerColor);
-	_core->PlayerColor = color;
+	Color color = getRandomColor(_core->getPlayerColor());
+	_core->setPlayerColor(color);
 
 	if (this->getNumberOfRunningActions() > 0)
 	{
@@ -70,6 +70,8 @@ void Player::changeColor()
 
 bool Player::init()
 {
+	_core = Core::sharedCore();
+
 	auto redAnimate = Animate::create(
 		AnimationCache::sharedAnimationCache()->getAnimation("RED"));
 	auto greenAnimate = Animate::create(
@@ -95,9 +97,14 @@ bool Player::init()
 	return true;
 }
 
+float Player::getRadius()
+{
+	return kPlayerRadius;
+}
+
 Color Player::getColor()
 {
-	return _core->PlayerColor;
+	return _core->getPlayerColor();
 }
 
 Player::Player()

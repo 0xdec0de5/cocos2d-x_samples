@@ -15,6 +15,21 @@ Core * Core::sharedCore(void)
 	return &s_sharedCore;
 }
 
+unsigned short Core::getHitpoints()
+{
+	return _playerHitpoints;
+}
+
+void Core::playerHit()
+{
+	_playerHitpoints = _playerHitpoints - 1;
+}
+
+const std::vector<Sprite*> Core::getBaddies()
+{
+	return _baddies;
+}
+
 void Core::setPreviousPosition(Vec2 position)
 {
 	this->_previousPos = position;
@@ -45,8 +60,39 @@ float Core::getTargetAngle()
 	return this->_targetAngle;
 }
 
+void Core::setPlayerColor(Color color)
+{
+	this->_playerColor = color;
+}
+
+Color Core::getPlayerColor()
+{
+	return this->_playerColor;
+}
+
+void Core::setPlayerSpeed(unsigned int speed)
+{
+	this->_playerSpeed = speed;
+}
+
+unsigned int Core::getPlayerSpeed()
+{
+	return this->_playerSpeed;
+}
+
+void Core::setPlayerMoving(bool isMoving)
+{
+	this->_playerMoving = isMoving;
+}
+
+bool Core::getPlayerMoving()
+{
+	return this->_playerMoving;
+}
+
 bool Core::init()
 {
+	this->setPlayerSpeed(kPlayerSpeed);
 
 	auto spritecache = SpriteFrameCache::getInstance();
 

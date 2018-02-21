@@ -10,6 +10,8 @@ class Player : public Sprite
 {
 private:
 
+	const float kPlayerRadius = 10.0f;
+
 	// Instances
 	Core * _core;
 
@@ -27,6 +29,8 @@ private:
 public:
 
 	virtual bool init();
+
+	float getRadius();
 
 	Color getColor();
 

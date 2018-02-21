@@ -18,19 +18,22 @@
     <ClCompile Include="main.cpp">
       <Filter>win32</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Player.cpp">
+      <Filter>classes</Filter>
+    </ClCompile>
     <ClCompile Include="..\Classes\AppDelegate.cpp">
       <Filter>classes</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\GameMenu.cpp">
+    <ClCompile Include="..\Classes\Baddie.cpp">
+      <Filter>classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Core.cpp">
       <Filter>classes</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\GameLayer.cpp">
       <Filter>classes</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Player.cpp">
-      <Filter>classes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Core.cpp">
+    <ClCompile Include="..\Classes\GameMenu.cpp">
       <Filter>classes</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,7 +41,16 @@
     <ClInclude Include="main.h">
       <Filter>win32</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Resources.h">
+      <Filter>headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Baddie.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Core.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\GameLayer.h">
@@ -48,12 +60,6 @@
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Player.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Core.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Resources.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>
