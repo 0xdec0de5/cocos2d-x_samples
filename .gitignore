@@ -5,6 +5,10 @@
 **/Releas.win32/
 **/.vs/
 
+# Build and Project output Mac
+**/DerivedData/
+**/xcuserdata/
+
 # VS user files
 *.user
 

@@ -8,7 +8,7 @@ Color Player::getRandomColor(Color c)
 
 	if (c == Color::None)
 	{
-		if (rnd < 0.333)
+		if (rnd < 0.334)
 		{
 			return Color::Red;
 		}
@@ -27,12 +27,11 @@ Color Player::getRandomColor(Color c)
 		{
 			return rnd < 0.5 ? Color::Green : Color::Blue;
 		}
-
-		if (c == Color::Green)
+        else if (c == Color::Green)
 		{
 			return rnd < 0.5 ? Color::Red : Color::Blue;
 		}
-		if (c == Color::Blue)
+		else
 		{
 			return rnd < 0.5 ? Color::Green : Color::Red;
 		}
@@ -73,11 +72,11 @@ bool Player::init()
 	_core = Core::sharedCore();
 
 	auto redAnimate = Animate::create(
-		AnimationCache::sharedAnimationCache()->getAnimation("RED"));
+		AnimationCache::getInstance()->getAnimation("RED"));
 	auto greenAnimate = Animate::create(
-		AnimationCache::sharedAnimationCache()->getAnimation("GREEN"));
+		AnimationCache::getInstance()->getAnimation("GREEN"));
 	auto blueAnimate = Animate::create(
-		AnimationCache::sharedAnimationCache()->getAnimation("BLUE"));
+		AnimationCache::getInstance()->getAnimation("BLUE"));
 
 	_redAnimation = RepeatForever::create(redAnimate);
 	_greenAnimation = RepeatForever::create(greenAnimate);

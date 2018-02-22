@@ -99,9 +99,38 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-	std::string defaultPath = "..\\Resources";
-	cocos2d::FileUtils::getInstance()->setDefaultResourceRootPath(defaultPath);
-
+    auto target = this->getTargetPlatform();
+    
+    if (target == Platform::OS_IPAD)
+    {
+        // ipad
+        
+        if (frameSize.width > mediumResolutionSize.width)
+        {
+            // ipad hd
+            FileUtils::getInstance()->setDefaultResourceRootPath("image/ipadhd");
+            //CCEGLView::sharedOpenGLView()->setDesignResolutionSize(2048, 1536, kResolutionNoBorder);
+        }
+        else
+        {
+            //CCFileUtils::sharedFileUtils()->setResourceDirectory("ipad");
+        }
+    }
+    else if (target == Platform::OS_IPHONE)
+    {
+        // iphone
+        
+        if (frameSize.width > mediumResolutionSize.width)
+        {
+            // iphone hd
+            FileUtils::getInstance()->setDefaultResourceRootPath("hd");
+        }
+    }
+    else if (target == Platform::OS_WINDOWS)
+    {
+        FileUtils::getInstance()->setDefaultResourceRootPath("../Resources");
+    }
+    
 
 	//Init Core
 	Core::sharedCore();

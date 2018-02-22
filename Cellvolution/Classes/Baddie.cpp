@@ -5,10 +5,10 @@ void Baddie::destroyMe()
 {
 	Director::getInstance()->getActionManager()->removeAllActionsFromTarget(this);
 
-	if (this->getParent())
-	{
-		this->getParent()->removeChild(this);
-	}
+    if(this->getParent())
+    {
+        this->getParent()->removeChild(this);
+    }
 }
 
 bool Baddie::init()
@@ -50,7 +50,7 @@ void Baddie::prepare()
 		_color = Color::Blue;
 	}
 
-	frame = SpriteFrameCache::getInstance()->spriteFrameByName(image);
+	frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(image);
 	this->setDisplayFrame(frame);
 	this->_radius = calcRadius(this);
 	this->setVisible(true);
@@ -66,8 +66,10 @@ Baddie::~Baddie()
 {
 }
 
-void Baddie::removeBaddie(Node * gameLayer)
+void Baddie::removeBaddie(Sound sound)
 {
+    _core->playEffect(sound);
+    
 	Animation* explosion = AnimationCache::getInstance()->getAnimation("Explosion");
 	Animate* animate = Animate::create(explosion);
 
@@ -76,9 +78,7 @@ void Baddie::removeBaddie(Node * gameLayer)
 
 	this->stopAllActions();
 
-	this->runAction(sequence/*Repeat::create(animate, 1)*/);
-
-	//gameLayer->removeChild(this);
+	this->runAction(sequence);
 }
 
 float Baddie::getRadius()
@@ -116,7 +116,7 @@ void Baddie::triggerIsMoving()
 			auto angle = randi(0, 360);
 			baddie->runAction(MoveTo::create(0.5f, baddie->getPosition() + Vec2(sin(angle) * 10, cos(angle) * 10)));
 			angle = (angle + 180) % 360;
-			this->runAction(MoveTo::create(0.5f, ccpAdd(this->getPosition(), Vec2(sin(angle) * 10, cos(angle) * 10))));
+			this->runAction(MoveTo::create(0.5f, this->getPosition() + Vec2(sin(angle) * 10, cos(angle) * 10)));
 		}
 	}
 }
@@ -138,6 +138,10 @@ FiniteTimeAction * Baddie::getMoveAction()
 
 	// This is the bad guy's speed
 	float modifiedBaddieSpeed = 4.0f;
+    
+    float distance = this->getPosition().getDistance(_core->getPreviousPosition());
+    
+    modifiedBaddieSpeed = distance / 500.0f * modifiedBaddieSpeed;
 
 	FiniteTimeAction * move = MoveTo::create(modifiedBaddieSpeed, _core->getPreviousPosition());
 

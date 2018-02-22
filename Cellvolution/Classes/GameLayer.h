@@ -26,20 +26,18 @@ private:
 	void onTouchesMoved(Touch*, Event*);
 	void onTouchesEnded(Touch*, Event*);
 
+	void handleCollision(float);
+	void updateBaddies(float);
+    void playerMove(float);
+    void updateMusic(float);
+    void updateUi(float);
+	void addBaddie();
+
 public:
 	GameLayer();
 
 	virtual bool init();
 	virtual void update(float);
-	//virtual void draw();
-
-	void handleCollision(float);
-	void UpdateBaddies(float);
-	void PlayerMove(float);
-	void updateUi(float);
-	void updateMusic(float);
-
-	void addBaddie();
 
 	static cocos2d::Scene* scene();
 

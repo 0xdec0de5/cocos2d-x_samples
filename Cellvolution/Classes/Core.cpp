@@ -1,50 +1,8 @@
-
 #include "Core.h"
 #include <string>
 
 static bool s_bFirstRun = true;
 static Core s_sharedCore;
-
-void Core::preloadEffects()
-{
-	// Sound Effects
-	SimpleAudioEngine::getInstance()->preloadEffect(sound_explosion_good.c_str());
-	SimpleAudioEngine::getInstance()->preloadEffect(sound_explosion_bad.c_str());
-
-	// Music
-	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(music_theme.c_str());
-
-	for (auto i = 1u; i <= 14; i++)
-	{
-		std::string musicFile = "music/track" + std::to_string(i) + ".mp3";
-		SimpleAudioEngine::getInstance()->preloadBackgroundMusic(musicFile.c_str());
-	}
-}
-
-void Core::stopEffect(unsigned int effectId)
-{
-	SimpleAudioEngine::getInstance()->stopEffect(effectId);
-}
-
-unsigned int Core::playEffect(Sound sound)
-{
-	switch (sound)
-	{
-	case Sound::Explosion_Bad:
-		return SimpleAudioEngine::getInstance()->playEffect(sound_explosion_bad.c_str());
-	case Sound::Explosion_Good:
-		return SimpleAudioEngine::getInstance()->playEffect(sound_explosion_good.c_str());
-	case Sound::None:
-	default:
-		return 0u;
-	}
-
-}
-
-void Core::setBackgroundMusic(std::string music, bool loop = false)
-{
-	SimpleAudioEngine::getInstance()->playBackgroundMusic(music.c_str(), loop);
-}
 
 Core * Core::sharedCore(void)
 {
@@ -68,7 +26,7 @@ void Core::playerScored()
 
 unsigned short Core::getHitpoints()
 {
-	return _playerHitpoints;
+    return _playerHitpoints;
 }
 
 void Core::playerHit()
@@ -149,8 +107,8 @@ bool Core::init()
 
 	// the .plist file can be generated with any of the tools mentioned below
 	spritecache->addSpriteFramesWithFile(
-		"image\\game_sprites.plist",
-		"image\\game_sprites.png"
+		"image/game_sprites.plist",
+		"image/game_sprites.png"
 	);
 
 	// Get the explosion sprites
@@ -247,5 +205,67 @@ bool Core::init()
 	AnimationCache::getInstance()->addAnimation(rogueAnimation,
 		"ROGUE");
 
+    //Preload all sounds
+    preloadEffects();
+    
+    SimpleAudioEngine::getInstance()->setEffectsVolume(1.0f);
+    SimpleAudioEngine::getInstance()->setBackgroundMusicVolume(1.0f);
+    
 	return true;
+}
+
+void Core::preloadEffects()
+{
+    SimpleAudioEngine::getInstance()->preloadBackgroundMusic(music_theme.c_str());
+    
+    for(auto i = 1u; i <= 14; i++)
+    {
+        std::string music = "music/track" + std::to_string(i) + ".mp3";
+        SimpleAudioEngine::getInstance()->preloadBackgroundMusic(music.c_str());
+    }
+    
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_arrow_shot.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_damage.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_explosion_bad.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_explosion_exploded.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_explosion_good.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_explosion_grenade.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_explosion_evolved.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_health.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_pacman.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_speed_finished.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_pain.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_pain_immune.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_score.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_speed.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_tick.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_slomo_expired.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_slomo_reload.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_slomo_begin.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_rogue_tick.c_str());
+    SimpleAudioEngine::getInstance()->preloadEffect(sound_explosion_mutant.c_str());
+}
+
+void Core::stopEffect(unsigned int effectId)
+{
+    SimpleAudioEngine::getInstance()->stopEffect(effectId);
+}
+
+unsigned int Core::playEffect(Sound sound)
+{
+    switch(sound)
+    {
+        case Sound::Explosion_Good:
+            return SimpleAudioEngine::getInstance()->playEffect(sound_explosion_good.c_str());
+        case Sound::Explosion_Bad:
+            return SimpleAudioEngine::getInstance()->playEffect(sound_explosion_bad.c_str());
+        case Sound::None:
+        default:
+            return 0;
+    }
+}
+
+void Core::setBackgroundMusic(std::string music, bool loop = false)
+{
+    SimpleAudioEngine::getInstance()->playBackgroundMusic(music.c_str(), loop);
 }

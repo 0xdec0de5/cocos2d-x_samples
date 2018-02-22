@@ -13,7 +13,7 @@ bool GameLayer::init()
 	//Get windows size
 	auto winSize = Director::getInstance()->getWinSize();
 
-	//set poistion of player to middle of screen
+	//set poistion to middle of screen
 	Vec2 pos;
 	pos.x = winSize.width / 2;
 	pos.y = winSize.height / 2;
@@ -24,16 +24,16 @@ bool GameLayer::init()
 	this->addChild(_player, 400);
 
 	// Add game background
-	auto background = Sprite::create("image\\game_background.png");
+	auto background = Sprite::create("image/game_background.png");
 	background->setAnchorPoint(Vec2(0.5f, 0.5f));
-	background->setPosition(pos);
+    background->setPosition(pos);
 	this->addChild(background, -1000);
 
 	// Add blood overlay
-	auto overlay = Sprite::create("image\\overlay.png");
+	auto overlay = Sprite::create("image/overlay.png");
 	overlay->setOpacity(0);
 	overlay->setAnchorPoint(Vec2(0.5f, 0.5f));
-	overlay->setPosition(pos);
+    overlay->setPosition(pos);
 	this->addChild(overlay, 1000, "OVERLAY");
 
 	//Handle Touch Events
@@ -64,24 +64,25 @@ bool GameLayer::init()
 	_lblScore->setPosition(Vec2(winSize.width / 2 + 50, winSize.height - 20));
 	this->addChild(_lblScore, 10000);
 
+	// stop music
+    SimpleAudioEngine::getInstance()->stopBackgroundMusic();
+
 	// Re-initialize Core
 	auto core = Core::sharedCore();
+	core->reset();
+    
 	core->setPlayerMoving(false);
-
-	// Stop play existing music
-	SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 
 	return true;
 }
 
 void GameLayer::update(float dt)
 {
-	this->PlayerMove(dt);
-	this->UpdateBaddies(dt);
+	this->playerMove(dt);
+	this->updateBaddies(dt);
 	this->handleCollision(dt);
 	this->updateUi(dt);
 	this->updateMusic(dt);
-
 }
 
 void GameLayer::updateMusic(float dt)
@@ -93,16 +94,15 @@ void GameLayer::updateMusic(float dt)
 
 	std::string tune = "music/theme" + std::to_string(randi(1, 14)) + ".mp3";
 	Core::sharedCore()->setBackgroundMusic(tune, false);
-
 }
 
 void GameLayer::updateUi(float dt)
 {
-	std::string health = "Health: " + std::to_string(Core::sharedCore()->getHitpoints());
-	_lblHealth->setString(health);
-
-	std::string score = "Score: " + std::to_string(Core::sharedCore()->getScore());
-	_lblScore->setString(score);
+    std::string score = "Score: " + std::to_string(Core::sharedCore()->getScore());
+    std::string health = "Health: " + std::to_string(Core::sharedCore()->getHitpoints());
+    
+    _lblHealth->setString(health);
+    _lblScore->setString(score);
 }
 
 void GameLayer::handleCollision(float dt)
@@ -120,35 +120,31 @@ void GameLayer::handleCollision(float dt)
 
 		if (isCollide(baddie->getPosition(), baddie->getRadius(), _player->getPosition(), _player->getRadius())) 
 		{
+            Sound sound = Sound::None;
+            
+            if(baddie->getColor() == _player->getColor())
+            {
+                sound = Sound::Explosion_Good;
+                core->playerScored();
+            }
+            else
+            {
+                //Deduct one hitpoint from player
+                sound = Sound::Explosion_Bad;
+                core->playerHit();
+            }
+            
 			//Destroy the baddie
 			if (_pool.contains(baddie)) {
 
-				baddie->removeBaddie(this);
+				baddie->removeBaddie(sound);
 
 				//update iterator
 				it = _pool.erase(it);
 
 			}
 
-			Sound sound = Sound::None;
-
-			// Handle if player ate a same color cell or took damage
-			if (baddie->getColor() == _player->getColor())
-			{
-				sound = Sound::Explosion_Good;
-				core->playerScored();
-			}
-			else
-			{
-
-				sound = Sound::Explosion_Bad;
-
-				//Deduct one hitpoint from player
-				core->playerHit();
-			}
-
 			core->playEffect(sound);
-
 		}
 
 		if (it != _pool.end())
@@ -179,11 +175,16 @@ void GameLayer::handleCollision(float dt)
 		//Win!
 		Director::getInstance()->replaceScene(GameMenu::scene());
 	}
-
-
+    
+    //Test win condition
+    if(core->getScore() >= 25)
+    {
+        //Win!
+        Director::getInstance()->replaceScene(GameMenu::scene());
+    }
 }
 
-void GameLayer::UpdateBaddies(float dt)
+void GameLayer::updateBaddies(float dt)
 {
 	_gameTime += dt;
 
@@ -195,7 +196,7 @@ void GameLayer::UpdateBaddies(float dt)
 	}
 }
 
-void GameLayer::PlayerMove(float dt)
+void GameLayer::playerMove(float dt)
 {
 	auto core = Core::sharedCore();
 
@@ -353,6 +354,10 @@ void GameLayer::processEvent(Event * e)
 			CCLOG("WE DONT HANDLE YET");
 			return;
 		}
+        default:
+            CCLOG("WE WONT HANDLE");
+            return;
+            
 	}
 
 	Core * core = Core::sharedCore();
