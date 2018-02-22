@@ -12,6 +12,8 @@ private:
 	float _gameTime = 0.0f;
 	int _baddieCount = 0;
 	Vector<Sprite*> _pool = Vector<Sprite*>(100);
+    Label * _lblHP;
+    Label * _lblScore;
 
 	void processEvent(Event * e);
 
@@ -23,17 +25,19 @@ private:
 	void onTouchesMoved(Touch*, Event*);
 	void onTouchesEnded(Touch*, Event*);
 
+	void handleCollision(float);
+	void updateBaddies(float);
+    void playerMove(float);
+    void soundCheck(float);
+    void updateUi(float);
+	void addBaddie();
+
 public:
 	GameLayer();
 
 	virtual bool init();
 	virtual void update(float);
 	//virtual void draw();
-
-	void handleCollision(float);
-	void UpdateBaddies(float);
-	void PlayerMove(float);
-	void addBaddie();
 
 	static cocos2d::Scene* scene();
 

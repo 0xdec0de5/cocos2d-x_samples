@@ -25,7 +25,7 @@ public:
 	Baddie();
 	~Baddie();
 
-	void removeBaddie(Node *);
+	void removeBaddie(Sound);
 
 	float getRadius();
 

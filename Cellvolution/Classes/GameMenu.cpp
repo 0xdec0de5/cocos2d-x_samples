@@ -22,12 +22,12 @@ void GameMenu::update(float deltaTime)
 bool GameMenu::init()
 {
 	const auto winSize = 
-		cocos2d::Director::sharedDirector()->getWinSize();
+		cocos2d::Director::getInstance()->getWinSize();
 
 	// Set our backgroung
-	auto * background = cocos2d::Sprite::create("image\\loading.png");
+	auto * background = cocos2d::Sprite::create("image/loading.png");
 
-	std::string buttons = "image\\button_sprites.png";
+	std::string buttons = "image/button_sprites.png";
 
 	//Create button sprites for menu
 	auto newGameNormal = cocos2d::Sprite::create(buttons, cocos2d::Rect(0, 0, 210, 53));
@@ -46,6 +46,9 @@ bool GameMenu::init()
 
 	this->addChild(background);
 	this->addChild(menu);
+    
+    // Play theme
+    Core::sharedCore()->setBackgroundMusic(music_theme, true);
 
 	return true;
 }

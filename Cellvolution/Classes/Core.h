@@ -1,11 +1,15 @@
 #pragma once
 
 #include "cocos2d.h"
+#include "audio/include/SimpleAudioEngine.h"
 #include "Resources.h"
+#include <time.h>
 #include <assert.h>
 #include <vector>
+#include <string>
 
 using namespace cocos2d;
+using namespace CocosDenshion;
 
 class Core
 {
@@ -14,8 +18,11 @@ private:
 	unsigned int _playerSpeed = kPlayerSpeed;
 	bool _playerMoving = false;
 	unsigned short _playerHitpoints = 10u;
+    unsigned short _playerScore = 0u;
 
-	bool init();
+    bool init();
+    void preloadEffects();
+    
 	Vec2 _targetPos = Vec2(0.0f, 0.0f);
 	Vec2 _previousPos = Vec2(0.0f, 0.0f);
 	float _targetAngle = 0.0f;
@@ -24,11 +31,19 @@ private:
 	std::vector<Sprite*> _baddies{};
 
 public:
+    
 	// Constants
 	unsigned int kPlayerSpeed = 140u;
 
 	static Core * sharedCore(void);
-
+    
+    unsigned int playEffect(Sound);
+    void stopEffect(unsigned int);
+    void setBackgroundMusic(std::string music, bool loop);
+    
+    unsigned short getScore();
+    void playerScored();
+    
 	unsigned short getHitpoints();
 	void playerHit();
 
@@ -56,7 +71,9 @@ public:
 
 inline float randf(int min, int max)
 {
-	assert(max >= min);
+    assert(max >= min);
+    
+    srand ((unsigned int)time(NULL));
 	return min + (rand() % (max - min + 1));
 }
 
