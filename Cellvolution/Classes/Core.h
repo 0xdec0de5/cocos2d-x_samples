@@ -39,6 +39,11 @@ public:
 	unsigned int playEffect(Sound);
 	void setBackgroundMusic(std::string, bool);
 
+	/**
+	 * \brief Resets hitpoints and score when starting new game
+	 */
+	void reset();
+
 	static Core * sharedCore(void);
     
     unsigned short getScore();

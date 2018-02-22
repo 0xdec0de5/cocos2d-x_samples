@@ -269,3 +269,9 @@ void Core::setBackgroundMusic(std::string music, bool loop = false)
 {
     SimpleAudioEngine::getInstance()->playBackgroundMusic(music.c_str(), loop);
 }
+
+void Core::reset()
+{
+	this->_playerHitpoints = 10;
+	this->_playerScore = 0;
+}
