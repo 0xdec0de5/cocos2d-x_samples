@@ -26,12 +26,14 @@ bool GameLayer::init()
 	// Add game background
 	auto background = Sprite::create("image\\game_background.png");
 	background->setAnchorPoint(Vec2(0.5f, 0.5f));
+	background->setPosition(pos);
 	this->addChild(background, -1000);
 
 	// Add blood overlay
 	auto overlay = Sprite::create("image\\overlay.png");
 	overlay->setOpacity(0);
 	overlay->setAnchorPoint(Vec2(0.5f, 0.5f));
+	overlay->setPosition(pos);
 	this->addChild(overlay, 1000, "OVERLAY");
 
 	//Handle Touch Events
@@ -47,15 +49,27 @@ bool GameLayer::init()
 	//Sink the update on frame function
 	scheduleUpdate();
 
-	// TODO start music
+	//Add labels
+	std::string health = "Health: " + std::to_string(Core::sharedCore()->getHitpoints());
 
+	_lblHealth = Label::createWithTTF(health, "fonts/chemrea.ttf", 16);
+	_lblHealth->setColor(Color3B::RED);
+	_lblHealth->setPosition(Vec2(winSize.width / 2 - 50, winSize.height - 20));
+	this->addChild(_lblHealth, 10000);
 
-	// Set GameState to playing
+	std::string score = "Score: " + std::to_string(Core::sharedCore()->getScore());
+
+	_lblScore = Label::createWithTTF(score, "fonts/chemrea.ttf", 16);
+	_lblScore->setColor(Color3B::YELLOW);
+	_lblScore->setPosition(Vec2(winSize.width / 2 + 50, winSize.height - 20));
+	this->addChild(_lblScore, 10000);
 
 	// Re-initialize Core
 	auto core = Core::sharedCore();
 	core->setPlayerMoving(false);
 
+	// Stop play existing music
+	SimpleAudioEngine::getInstance()->stopBackgroundMusic();
 
 	return true;
 }
@@ -65,7 +79,30 @@ void GameLayer::update(float dt)
 	this->PlayerMove(dt);
 	this->UpdateBaddies(dt);
 	this->handleCollision(dt);
+	this->updateUi(dt);
+	this->updateMusic(dt);
 
+}
+
+void GameLayer::updateMusic(float dt)
+{
+	if (SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying())
+	{
+		return;
+	}
+
+	std::string tune = "music/theme" + std::to_string(randi(1, 14)) + ".mp3";
+	Core::sharedCore()->setBackgroundMusic(tune, false);
+
+}
+
+void GameLayer::updateUi(float dt)
+{
+	std::string health = "Health: " + std::to_string(Core::sharedCore()->getHitpoints());
+	_lblHealth->setString(health);
+
+	std::string score = "Score: " + std::to_string(Core::sharedCore()->getScore());
+	_lblScore->setString(score);
 }
 
 void GameLayer::handleCollision(float dt)
@@ -93,8 +130,25 @@ void GameLayer::handleCollision(float dt)
 
 			}
 
-			//Deduct one hitpoint from player
-			core->playerHit();
+			Sound sound = Sound::None;
+
+			// Handle if player ate a same color cell or took damage
+			if (baddie->getColor() == _player->getColor())
+			{
+				sound = Sound::Explosion_Good;
+				core->playerScored();
+			}
+			else
+			{
+
+				sound = Sound::Explosion_Bad;
+
+				//Deduct one hitpoint from player
+				core->playerHit();
+			}
+
+			core->playEffect(sound);
+
 		}
 
 		if (it != _pool.end())
@@ -117,7 +171,13 @@ void GameLayer::handleCollision(float dt)
 
 		auto overlay = this->getChildByName("OVERLAY");
 		overlay->setOpacity(damage);
+	}
 
+	// Check our game win condition
+	if (core->getScore() >= 10)
+	{
+		//Win!
+		Director::getInstance()->replaceScene(GameMenu::scene());
 	}
 
 

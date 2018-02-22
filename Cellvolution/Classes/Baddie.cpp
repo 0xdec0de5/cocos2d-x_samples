@@ -5,6 +5,10 @@ void Baddie::destroyMe()
 {
 	Director::getInstance()->getActionManager()->removeAllActionsFromTarget(this);
 
+	if (this->getParent())
+	{
+		this->getParent()->removeChild(this);
+	}
 }
 
 bool Baddie::init()

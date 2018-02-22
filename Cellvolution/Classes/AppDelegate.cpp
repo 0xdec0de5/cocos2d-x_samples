@@ -55,6 +55,9 @@ static int register_all_packages()
 
 bool AppDelegate::applicationDidFinishLaunching() {
     
+	// Seed our randomness
+	srand((unsigned int)time(NULL));
+
 	// initialize director
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();

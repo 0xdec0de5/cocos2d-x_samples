@@ -1,6 +1,8 @@
 #include "GameMenu.h"
 #include <string>
+#include "audio/include/SimpleAudioEngine.h";
 
+using namespace CocosDenshion;
 using namespace cocos2d;
 
 cocos2d::Scene * GameMenu::scene()
@@ -46,6 +48,9 @@ bool GameMenu::init()
 
 	this->addChild(background);
 	this->addChild(menu);
+
+	// Play the theme
+	Core::sharedCore()->setBackgroundMusic(music_theme, true);
 
 	return true;
 }

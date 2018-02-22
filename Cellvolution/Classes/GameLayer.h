@@ -13,6 +13,9 @@ private:
 	int _baddieCount = 0;
 	Vector<Sprite*> _pool = Vector<Sprite*>(100);
 
+	Label * _lblHealth;
+	Label * _lblScore;
+
 	void processEvent(Event * e);
 
 	void onMouseDown(Event *);
@@ -33,6 +36,9 @@ public:
 	void handleCollision(float);
 	void UpdateBaddies(float);
 	void PlayerMove(float);
+	void updateUi(float);
+	void updateMusic(float);
+
 	void addBaddie();
 
 	static cocos2d::Scene* scene();

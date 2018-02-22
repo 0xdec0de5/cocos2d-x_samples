@@ -5,6 +5,47 @@
 static bool s_bFirstRun = true;
 static Core s_sharedCore;
 
+void Core::preloadEffects()
+{
+	// Sound Effects
+	SimpleAudioEngine::getInstance()->preloadEffect(sound_explosion_good.c_str());
+	SimpleAudioEngine::getInstance()->preloadEffect(sound_explosion_bad.c_str());
+
+	// Music
+	SimpleAudioEngine::getInstance()->preloadBackgroundMusic(music_theme.c_str());
+
+	for (auto i = 1u; i <= 14; i++)
+	{
+		std::string musicFile = "music/track" + std::to_string(i) + ".mp3";
+		SimpleAudioEngine::getInstance()->preloadBackgroundMusic(musicFile.c_str());
+	}
+}
+
+void Core::stopEffect(unsigned int effectId)
+{
+	SimpleAudioEngine::getInstance()->stopEffect(effectId);
+}
+
+unsigned int Core::playEffect(Sound sound)
+{
+	switch (sound)
+	{
+	case Sound::Explosion_Bad:
+		return SimpleAudioEngine::getInstance()->playEffect(sound_explosion_bad.c_str());
+	case Sound::Explosion_Good:
+		return SimpleAudioEngine::getInstance()->playEffect(sound_explosion_good.c_str());
+	case Sound::None:
+	default:
+		return 0u;
+	}
+
+}
+
+void Core::setBackgroundMusic(std::string music, bool loop = false)
+{
+	SimpleAudioEngine::getInstance()->playBackgroundMusic(music.c_str(), loop);
+}
+
 Core * Core::sharedCore(void)
 {
 	if (s_bFirstRun)
@@ -13,6 +54,16 @@ Core * Core::sharedCore(void)
 		s_bFirstRun = false;
 	}
 	return &s_sharedCore;
+}
+
+unsigned short Core::getScore()
+{
+	return this->_playerScore;
+}
+
+void Core::playerScored()
+{
+	this->_playerScore++;
 }
 
 unsigned short Core::getHitpoints()
@@ -130,7 +181,7 @@ bool Core::init()
 	}
 
 	Animation * explosionAnimation = Animation::createWithSpriteFrames(
-		explosionFrame, 0.05);
+		explosionFrame, 0.05f);
 
 	AnimationCache::getInstance()->addAnimation(explosionAnimation,
 		"Explosion");

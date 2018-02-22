@@ -4,7 +4,9 @@
 #include "Resources.h"
 #include <assert.h>
 #include <vector>
+#include "audio/include/SimpleAudioEngine.h"
 
+using namespace CocosDenshion;
 using namespace cocos2d;
 
 class Core
@@ -14,6 +16,7 @@ private:
 	unsigned int _playerSpeed = kPlayerSpeed;
 	bool _playerMoving = false;
 	unsigned short _playerHitpoints = 10u;
+	unsigned short _playerScore = 0u;
 
 	bool init();
 	Vec2 _targetPos = Vec2(0.0f, 0.0f);
@@ -27,7 +30,16 @@ public:
 	// Constants
 	unsigned int kPlayerSpeed = 140u;
 
+	void preloadEffects();
+	void stopEffect(unsigned int);
+	unsigned int playEffect(Sound);
+	void setBackgroundMusic(std::string, bool);
+
+
 	static Core * sharedCore(void);
+
+	unsigned short getScore();
+	void playerScored();
 
 	unsigned short getHitpoints();
 	void playerHit();
@@ -57,6 +69,7 @@ public:
 inline float randf(int min, int max)
 {
 	assert(max >= min);
+
 	return min + (rand() % (max - min + 1));
 }
 

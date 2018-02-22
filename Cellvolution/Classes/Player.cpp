@@ -6,35 +6,35 @@ Color Player::getRandomColor(Color c)
 {
 	float rnd = randf(0, 1);
 
-	if (c == None)
+	if (c == Color::None)
 	{
 		if (rnd < 0.333)
 		{
-			return Red;
+			return Color::Red;
 		}
 		else if (rnd > 0.665)
 		{
-			return Blue;
+			return Color::Blue;
 		}
 		else
 		{
-			return Green;
+			return Color::Green;
 		}
 	}
 	else
 	{
-		if (c == Red)
+		if (c == Color::Red)
 		{
-			return rnd < 0.5 ? Green : Blue;
+			return rnd < 0.5 ? Color::Green : Color::Blue;
 		}
 
-		if (c == Green)
+		if (c == Color::Green)
 		{
-			return rnd < 0.5 ? Red : Blue;
+			return rnd < 0.5 ? Color::Red : Color::Blue;
 		}
-		if (c == Blue)
+		if (c == Color::Blue)
 		{
-			return rnd < 0.5 ? Green : Red;
+			return rnd < 0.5 ? Color::Green : Color::Red;
 		}
 	}
 }
@@ -51,17 +51,17 @@ void Player::changeColor()
 
 	this->runAction(_mainSequence);
 
-	if (color == Red)
+	if (color == Color::Red)
 	{
 		this->runAction(_redAnimation);
 	}
 
-	if (color == Green)
+	if (color == Color::Green)
 	{
 		this->runAction(_greenAnimation);
 	}
 
-	if (color == Blue)
+	if (color == Color::Blue)
 	{
 		this->runAction(_blueAnimation);
 	}
